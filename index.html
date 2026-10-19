@@ -103,7 +103,8 @@ h2.sec{font-size:1.4rem;margin-bottom:4px}
 .wcard small{color:var(--muted);font-size:.9rem;line-height:1.2}
 
 /* topic switch */
-.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+@media (max-width:560px){.seg{grid-template-columns:minmax(0,1fr)}}
 .segb{display:flex;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:10px 14px;font:600 1.15rem var(--f-display);text-align:left}
 .segb .n{flex:none;width:32px;height:32px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:1rem}
 .segb[aria-pressed="true"]{border-color:var(--green);background:var(--green-tint)}
@@ -241,6 +242,9 @@ h2.sec{font-size:1.4rem;margin-bottom:4px}
 .scene{display:flex;align-items:center;gap:12px;font-size:clamp(3rem,15vw,4.4rem);line-height:1.1}
 .scene .who{font-size:.8em}
 .scene .at{font:600 1.1rem var(--f-display);color:var(--muted)}
+.pscene{display:flex;justify-content:center}
+.pscene svg{width:min(62vw,250px);height:auto}
+.opts.four{grid-template-columns:repeat(2,minmax(0,1fr))}
 .shake{animation:shake .4s}
 @keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
@@ -399,6 +403,75 @@ const S_PLACES=[
   ['🏛️',"Where is Anna?<br>She isn't at the shop.<br>She is at the",'.','museum','Missä Anna on? Hän ei ole kaupassa. Hän on museossa.'],
   ['🏟️','Where is Tom?<br>He is at the','.','stadium','Missä Tom on? Hän on stadionilla.']
 ];
+
+/* Kotona: huoneet ja huonekalut (englanti, suomi, kuva, artikkeli, kuva sopii visaan, ryhmä) */
+const ROOMS=[
+  ['sofa','sohva','🛋️','a',1,'F'],['chair','tuoli','🪑','a',1,'F'],['bedroom','makuuhuone','🛌','a',0,'R'],['attic','ullakko','🏚️','an',0,'R'],
+  ['table','pöytä','🍽️','a',0,'F'],['bed','sänky','🛏️','a',1,'F'],['kitchen','keittiö','🍳','a',1,'R'],['bathroom','kylpyhuone','🛁','a',1,'R'],
+  ['lamp','lamppu','💡','a',1,'F'],['bookcase','kirjahylly','📚','a',0,'F'],['hall','eteinen','🚪','a',0,'R'],['living room','olohuone','📺','a',0,'R']
+];
+/* Kuuntele ja toista (kappale 3). Ääntämiset ovat minun kirjoittamiani, tarkista kirjasta. */
+const REXTRA=[
+  ["a treehouse","puumaja","🌳","/tri:haus/",1],
+  ["favourite","lempi-","⭐","/feivərit/",0],
+  ["a ball","pallo","⚽","/bɔ:l/",1],
+  ["missing","kadoksissa","🔍","/misiŋ/",0],
+  ["is it","onko se","❓","/iz it/",0],
+  ["on","päällä","⬆️","/ɔn/",0],
+  ["under","alla","⬇️","/ʌndə(r)/",0],
+  ["it isn't","se ei ole","🙅","/it iznt/",0],
+  ["behind","takana","🔙","/bi'haind/",0],
+  ["a door","ovi","🚪","/dɔ:(r)/",1],
+  ["a floor","lattia","🧹","/flɔ:(r)/",0],
+  ["Look!","Katso!","👀","/luk/",0],
+  ["a box","laatikko","📦","/bɔks/",1],
+  ["I don't think it's here.","En usko, että se on täällä.","🤔","/ai dəunt θiŋk its hiə(r)/",0],
+  ["why","miksi","❓","/wai/",0],
+  ["a pet","lemmikki","🐾","/pet/",0],
+  ["a flower","kukka","🌸","/flauə(r)/",1],
+  ["I don't know.","En tiedä.","🤷","/ai dəunt nəu/",0],
+  ["Oh my!","Voi hyvänen aika!","😮","/əu mai/",0],
+  ["is that","onko tuo","👉","/iz ðæt/",0],
+  ["a teddy bear","nalle","🧸","/tedi beə(r)/",1],
+  ["in the box","laatikossa","📦","/in ðə bɔks/",0],
+  ["on the box","laatikon päällä","📦","/ɔn ðə bɔks/",0],
+  ["under the box","laatikon alla","📦","/ʌndə ðə bɔks/",0],
+  ["behind the box","laatikon takana","📦","/bi'haind ðə bɔks/",0],
+  ["Where's the ball?","Missä pallo on?","⚽","",0],
+  ["On the bed?","Sängyn päällä?","🛏️","",0],
+  ["It isn't here.","Se ei ole täällä.","🙅","",0],
+  ["It's in the flower.","Se on kukassa.","🌸","",0],
+  ["Look in the box.","Katso laatikkoon.","📦","",0],
+  ["Is that your teddy bear?","Onko tuo sinun nallesi?","🧸","",0]
+];
+/* Viikonloppu (kappale 2): mitä osaat tehdä? Ääntämiset ovat minun kirjoittamiani. */
+const WEEKEND=[
+  ["drink","juoda","🥤","/driŋk/",1],["eat","syödä","🍴","/i:t/",1],["skate","luistella","⛸️","/skeit/",1],["ski","hiihtää","🎿","/ski:/",1],
+  ["write","kirjoittaa","✍️","/rait/",1],["draw","piirtää","✏️","/drɔ:/",1],["read","lukea","📖","/ri:d/",1],["jump","hypätä","🤸","/dʒʌmp/",1],
+  ["dance","tanssia","💃","/da:ns/",1],["sing","laulaa","🎤","/siŋ/",1],
+  ["play the piano","soittaa pianoa","🎹","/plei ðə pi'ænəu/",1],["play the violin","soittaa viulua","🎻","/plei ðə vaiə'lin/",1],
+  ["play the drums","soittaa rumpuja","🥁","/plei ðə drʌmz/",1],["play the guitar","soittaa kitaraa","🎸","/plei ðə gi'ta:(r)/",1],
+  ["play football","pelata jalkapalloa","⚽","/plei futbɔ:l/",1],["play basketball","pelata koripalloa","🏀","/plei ba:skitbɔ:l/",1],
+  ["play ice hockey","pelata jääkiekkoa","🏒","/plei ais hɔki/",1],["play floorball","pelata salibandya","🏑","/plei flɔ:bɔ:l/",1],
+  ["Can you draw?","Osaatko piirtää?","❓","/kæn ju: drɔ:/",0],["Yes, I can.","Kyllä, osaan.","✅","/jes ai kæn/",0],["No, I can't.","Ei, en osaa.","🙅","/nəu ai ka:nt/",0]
+];
+const roomWords=ROOMS.map((p,i)=>({id:i,en:p[0],fi:p[1],e:p[2],opp:null,art:p[3],pic:!!p[4],conf:p[5]}));
+const roomExtra=REXTRA.map((p,i)=>({id:12+i,en:p[0],fi:p[1],e:p[2],p:p[3],pic:!!p[4],opp:null,art:'',g:1}));
+const weekendWords=WEEKEND.map((p,i)=>({id:12+REXTRA.length+i,en:p[0],fi:p[1],e:p[2],p:p[3],pic:!!p[4],opp:null,art:'',g:2}));
+const S_ROOMS=[
+  ['🛋️','Mum watches TV on the','.','sofa','Äiti katsoo televisiota sohvalla.'],
+  ['🪑','I sit on a','.','chair','Istun tuolilla.'],
+  ['🍽️','We eat dinner at the','.','table','Syömme päivällistä pöydässä.'],
+  ['🧸','My teddy bear is on my','.','bed','Nallekarhuni on sängylläni.'],
+  ['💡','Turn on the','.','lamp','Laita lamppu päälle.'],
+  ['📚','I put my books on the','.','bookcase','Laitan kirjani kirjahyllyyn.'],
+  ['🍳','We cook dinner in the','.','kitchen','Valmistamme päivällisen keittiössä.'],
+  ['🛁','I take a bath in the','.','bathroom','Käyn kylvyssä kylpyhuoneessa.'],
+  ['📺','We watch TV in the','.','living room','Katsomme televisiota olohuoneessa.'],
+  ['📦','The old boxes are in the','.','attic','Vanhat laatikot ovat ullakolla.'],
+  ['🛏️','My bed is in the','.','bedroom','Sänkyni on makuuhuoneessa.'],
+  ['👟','We take off our shoes in the','.','hall','Riisumme kenkämme eteisessä.']
+];
 const TOPICS={
   opp:{name:'Vastakohdat',words:oppWords.concat(extraWords),sents:S_OPP,hasOpp:true,
     extra:{title:'Kuuntele ja toista',lead:'Lisäsanoja ja lauseita: sanat, suomennokset ja ääntäminen. Napauta kuullaksesi ne.'},
@@ -409,7 +482,13 @@ const TOPICS={
     extra:{title:'Kuuntele ja toista',lead:'Lisää sanoja ja lauseita kysymiseen ja vastaamiseen: where, she is, I can go and see… Napauta kuullaksesi ne.'},
     title:'Paikat englanniksi',
     lead:'Opettele 12 paikkaa: school, cinema, shop, library, hotel, café, restaurant, zoo, airport, hospital, museum ja stadium. Harjoittele myös kysymystä Where is…? ja vastausta He is at the… Lisäksi 48 sanaa ja lausetta kohdasta Kuuntele ja toista.',
-    sentDesc:'Missä he ovat? Täytä puuttuva paikka.',sentPrompt:'Missä hän on?'}
+    sentDesc:'Missä he ovat? Täytä puuttuva paikka.',sentPrompt:'Missä hän on?'},
+  rooms:{name:'Kotona',words:roomWords.concat(roomExtra,weekendWords),sents:S_ROOMS,hasOpp:false,prep:true,
+    extra:{title:'Kuuntele ja toista',lead:'Sanoja ja lauseita puumajasta: where, behind, look in the box… Napauta kuullaksesi ne.',end:12+REXTRA.length},
+    extra2:{title:'Viikonloppu: mitä osaat tehdä?',lead:'Verbejä, soittimia ja lajeja. Kysy: Can you draw? Vastaa: Yes, I can. tai No, I can\'t.'},
+    title:'Kotona englanniksi',
+    lead:'Opettele 12 huonetta ja huonekalua: sofa, chair, bedroom, attic, table, bed, kitchen, bathroom, lamp, bookcase, hall ja living room. Harjoittele sanoja in, on, under ja behind. Lisäksi '+REXTRA.length+' sanaa ja lausetta puumajasta sekä '+WEEKEND.length+' viikonloppusanaa ja -lausetta.',
+    sentDesc:'Missä kukin asia on? Täytä puuttuva sana.',sentPrompt:'Mikä sana puuttuu?'}
 };
 
 /* ---------- Apufunktiot ---------- */
@@ -525,9 +604,10 @@ const TILES=[
   ['match','c3','Vastakohdat','Yhdistä sanat, jotka tarkoittavat päinvastaista.','<circle cx="8" cy="16" r="5"/><circle cx="24" cy="16" r="5"/><path d="M13 16h6"/>','opp'],
   ['quiz','c4','Visa','10 kysymystä: kuva, kuuntelu ja suomennos.','<circle cx="16" cy="16" r="12"/><path d="M12 13a4 4 0 1 1 6 3.4c-1.3.8-2 1.5-2 3"/><path d="M16 24v.5"/>'],
   ['isnt','c3',"Is vai isn't",'Katso kuvaa ja valitse is tai isn\'t.','<circle cx="16" cy="16" r="12"/><path d="M10 16l4 4 8-8"/>','places'],
+  ['prep','c3','Missä pallo on?','Katso kuvaa ja valitse in, on, under tai behind.','<rect x="6" y="16" width="20" height="11" rx="2"/><circle cx="16" cy="9" r="4"/>','rooms'],
   ['sent','c5','Lauseet','','<path d="M5 6h22a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H15l-6 5v-5H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/>']
 ];
-const VIEWS={learn:()=>learn(0),memory:()=>memory(),match:()=>match(),quiz:()=>quiz(),sent:()=>sent(),isnt:()=>isnt()};
+const VIEWS={learn:()=>learn(0),memory:()=>memory(),match:()=>match(),quiz:()=>quiz(),sent:()=>sent(),isnt:()=>isnt(),prep:()=>prep()};
 const wcard=w=>`<button class="wcard" data-a="say" data-w="${w.id}"><span class="e">${w.e}</span><span class="tx"><b>${lab(w)}</b><small>${w.fi}</small>${w.p?`<small class="ipa">${w.p}</small>`:''}</span></button>`;
 
 const VERB=[['he','hän (poika)'],['she','hän (tyttö)'],['it','se']];
@@ -538,8 +618,14 @@ function verbHtml(){
   return `<section style="margin-top:30px"><h2 class="sec">Olla-verbi</h2><p class="lead" style="margin-bottom:0">Hän-sanan voi korvata myös nimellä tai nimityksellä. Napauta ja kuuntele.</p><div class="vlist">${rows}</div><div class="vsub">Esimerkkejä</div><div class="vlist">${EX.map(x=>vc(x[2],x[0],x[1],x[0])).join('')}</div></section>`;
 }
 
+const PREP=[['in','📥','sisällä, -ssa','laatikossa'],['on','⬆️','päällä','laatikon päällä'],['under','⬇️','alla','laatikon alla'],['behind','🔙','takana','laatikon takana']];
+function prepHtml(){
+  const rows=PREP.map(x=>vc(x[1],`The ball is ${x[0]} the box.`,`Pallo on ${x[3]}.`,`The ball is ${x[0]} the box`)).join('');
+  return `<section style="margin-top:30px"><h2 class="sec">In, on, under, behind</h2><p class="lead" style="margin-bottom:0">Sanat kertovat, missä jokin on. Napauta ja kuuntele.</p><div class="vlist">${rows}</div></section>`;
+}
+
 function home(){
-  const tiles=TILES.filter(t=>!t[5]||(t[5]==='opp'&&T.hasOpp)||(t[5]==='places'&&!T.hasOpp));
+  const tiles=TILES.filter(t=>!t[5]||t[5]===topic);
   $app.innerHTML=`
   <section class="hero">
     ${catSvg('normal',104,true)}
@@ -552,8 +638,9 @@ function home(){
     <p class="lead" style="margin-bottom:0">Napauta sanaa, niin kuulet sen ääntämisen.</p>
     <div class="prows">${PAGES.map(i=>`<div class="prow">${wcard(W[i*2])}<span class="arr" aria-hidden="true">${T.hasOpp?'↔':''}</span>${wcard(W[i*2+1])}</div>`).join('')}</div>
   </section>
-  ${T.verb?verbHtml():''}
-  ${T.extra?`<section style="margin-top:30px"><h2 class="sec">${T.extra.title}</h2><p class="lead" style="margin-bottom:0">${T.extra.lead}</p><div class="wgrid">${W.slice(12).map(w=>wcard(w)).join('')}</div></section>`:''}`;
+  ${T.verb?verbHtml():''}${T.prep?prepHtml():''}
+  ${T.extra?`<section style="margin-top:30px"><h2 class="sec">${T.extra.title}</h2><p class="lead" style="margin-bottom:0">${T.extra.lead}</p><div class="wgrid">${W.slice(12,T.extra.end||W.length).map(w=>wcard(w)).join('')}</div></section>`:''}
+  ${T.extra2?`<section style="margin-top:30px"><h2 class="sec">${T.extra2.title}</h2><p class="lead" style="margin-bottom:0">${T.extra2.lead}</p><div class="wgrid">${W.slice(T.extra.end).map(w=>wcard(w)).join('')}</div></section>`:''}`;
   setAct({
     topic:el=>{setTopic(el.dataset.k);go(home)},
     open:el=>go(VIEWS[el.dataset.k]),
@@ -782,6 +869,50 @@ function isnt(){
       const fi=`${q.pr[1]} ${q.truth?'on':'ei ole'} ${INES[q.said.en]}.`;
       $app.querySelector('#fb').innerHTML=`${right?catSvg('happy',44):''}<span class="${right?'okt':'badt'}">${right?'Miau! Oikein!':'Ei aivan.'}</span><span class="tr">${fi}</span><button class="btn sm" data-a="nxt">${n===N-1?'Tulokset':'Seuraava'}</button>`;
       say(`${q.pr[0]} ${ans} at ${atw(q.said.en)}`);
+      act.nxt=advance;
+    }});
+  }
+  ask();
+}
+
+/* ---------- Missä pallo on? ---------- */
+function prepSvg(k){
+  const box='#c98a4b',dark='#9a6528',edge='#6b4216',ball='#e8913a';
+  const b=(x,y,w,h,f)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${f}" stroke="${edge}" stroke-width="2"/>`;
+  const c=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${ball}" stroke="#b9621a" stroke-width="2"/><path d="M${x-r} ${y}q${r} ${-r*.6} ${2*r} 0" fill="none" stroke="#b9621a" stroke-width="1.6"/>`;
+  let g='';
+  if(k==='on')g=b(40,58,60,40,box)+c(70,43,15);
+  else if(k==='in')g=b(40,54,60,44,dark)+c(70,58,15)+b(40,70,60,28,box);
+  else if(k==='under')g=b(40,26,60,36,box)+`<rect x="44" y="62" width="7" height="36" fill="${edge}"/><rect x="89" y="62" width="7" height="36" fill="${edge}"/>`+c(70,84,13);
+  else g=c(96,76,17)+b(36,54,56,44,box);
+  return `<svg viewBox="0 0 140 110" aria-hidden="true"><line x1="6" y1="99" x2="134" y2="99" stroke="var(--line)" stroke-width="3" stroke-linecap="round"/>${g}</svg>`;
+}
+function prep(){
+  const N=10,t=tk,ks=PREP.map(x=>x[0]);
+  let n=0,score=0,locked=false,last='';
+  const qs=[];
+  while(qs.length<N){const k=ks[Math.floor(Math.random()*4)];if(k===last)continue;last=k;qs.push(k)}
+  const advance=()=>{n++;if(n>=N)result({title:'Missä pallo on?: valmis!',big:`${score} / ${N}`,rating:rate(score/N),again:prep});else ask()};
+  function ask(){
+    locked=false;
+    const ans=qs[n],fi=PREP.find(x=>x[0]===ans)[3];
+    $app.innerHTML=topbar('Missä pallo on?',`${n+1} / ${N}`)+
+      `<div class="progress"><i style="width:${n/N*100}%"></i></div>
+      <div class="qbox"><div class="pscene">${prepSvg(ans)}</div>
+      <p class="sentence">The ball is <span class="blank" id="blank">&nbsp;</span> the box.</p>
+      <p class="prompt">Katso kuvaa. Missä pallo on?</p></div>
+      <div class="opts four">${shuffle(ks).map(k=>`<button class="opt" data-a="ans" data-v="${k}">${k}</button>`).join('')}</div>
+      <div class="fb" id="fb" aria-live="polite"></div>`;
+    setAct({ans:el=>{
+      if(locked)return;
+      locked=true;
+      const right=el.dataset.v===ans;
+      const blank=$app.querySelector('#blank');
+      blank.textContent=ans;blank.classList.add(right?'ok':'bad');
+      $app.querySelectorAll('.opt').forEach(x=>{x.disabled=true;if(x.dataset.v===ans)x.classList.add('ok')});
+      if(right){score++;good();addStars(1)}else{el.classList.add('bad');bad()}
+      $app.querySelector('#fb').innerHTML=`${right?catSvg('happy',44):''}<span class="${right?'okt':'badt'}">${right?'Miau! Oikein!':'Ei aivan.'}</span><span class="tr">Pallo on ${fi}.</span><button class="btn sm" data-a="nxt">${n===N-1?'Tulokset':'Seuraava'}</button>`;
+      say(`The ball is ${ans} the box`);
       act.nxt=advance;
     }});
   }
